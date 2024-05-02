@@ -6,7 +6,7 @@ const fs = require("fs");
 
 
 
-export async function POST(request, response) {
+export async function POST(request : Request, response : Response) {
     try {
         const data = await request.json();
         const url = data.url;

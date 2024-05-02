@@ -23,7 +23,7 @@ export default function Home() {
     }
   }, []);
 
-  async function getTitle(url) {
+  async function getTitle(url: string) {
     try {
       const jsonx = await youtube.metadata(url);
       console.log(jsonx);
@@ -34,8 +34,8 @@ export default function Home() {
     }
   }
 
-  
-  async function downloadFile(url, type) {
+
+  async function downloadFile(url: string, type: string) {
     try {
 
       // Set the last downloaded link in cookies
@@ -50,8 +50,7 @@ export default function Home() {
       }
 
       setError("");
-      const title = await getTitle(url);
-      console.log("Video to download: " + title); // Use the title here
+
 
       const response = await axios.post('/api/yt', { url, type }, { responseType: 'blob' });
 
@@ -59,6 +58,9 @@ export default function Home() {
 
       const link = document.createElement('a');
       link.href = blobUrl;
+
+      const title = await getTitle(url);
+      console.log("Video to download: " + title); // Use the title here
 
 
       link.download = `${title}.${type}`;
@@ -88,11 +90,11 @@ export default function Home() {
     }
   }
 
-  function handleInputChange(event) {
+  function handleInputChange(event: any) {
     setYoutubeLink(event.target.value);
   }
 
-  async function handleDownload(type) {
+  async function handleDownload(type: string) {
     if (!youtubeLink.trim()) {
       setError("Please enter a YouTube link.");
       toast.error("Please enter a YouTube link.");
@@ -107,14 +109,14 @@ export default function Home() {
   }
 
   // Function to set a cookie
-  function setCookie(name, value, minutes) {
+  function setCookie(name: string, value: any, minutes: number) {
     const expires = new Date();
     expires.setTime(expires.getTime() + minutes * 60 * 1000); // Convert minutes to milliseconds
     document.cookie = `${name}###${value};expires=${expires.toUTCString()};path=/`;
   }
 
   // Function to get a cookie
-  function getCookie(name) {
+  function getCookie(name: string) {
     const cookies = document.cookie.split('; ');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].split('###');
