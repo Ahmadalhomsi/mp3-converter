@@ -13,6 +13,11 @@ export default function Home() {
   const [youtubeLink, setYoutubeLink] = useState("");
   const [error, setError] = useState("");
   const [lastDownloadedLink, setLastDownloadedLink] = useState('');
+  const [downloadHistory, setDownloadHistory] = useState<Array<{
+    url: string;
+    fileName: string;
+    timestamp: Date;
+  }>>([]);
 
 
   useEffect(() => {
@@ -20,6 +25,12 @@ export default function Home() {
     const lastLink = getCookie('lastDownloadedLink');
     if (lastLink) {
       setLastDownloadedLink(lastLink);
+    }
+
+    // Retrieve download history from cookies
+    const history = getCookie('downloadHistory');
+    if (history) {
+      setDownloadHistory(JSON.parse(history));
     }
   }, []);
 
@@ -59,7 +70,10 @@ export default function Home() {
       const link = document.createElement('a');
       link.href = blobUrl;
 
+
       const title = await getTitle(url);
+      const fileName = `${title}.${type}`;
+
       console.log("Video to download: " + title); // Use the title here
 
 
@@ -72,6 +86,11 @@ export default function Home() {
       URL.revokeObjectURL(blobUrl);
 
       toast.success('Video successfully downloaded');
+
+      // Update download history
+      const updatedHistory = [{ url, fileName, timestamp: new Date() }, ...downloadHistory];
+      setDownloadHistory(updatedHistory);
+      setCookie('downloadHistory', JSON.stringify(updatedHistory), 10); // 7 days expiration
 
       if (type === 'mp3') {
         setLoadingMp3(false);
@@ -155,7 +174,20 @@ export default function Home() {
           {loadingMp4 ? "Downloading..." : "Download MP4"}
         </button>
       </div>
-      {lastDownloadedLink && <div className="mt-4">Last downloaded link: {lastDownloadedLink}</div>}
+      {lastDownloadedLink && <div className="mt-4">Last link: {lastDownloadedLink}</div>}
+
+      {downloadHistory.length > 0 && (
+        <div className="mt-4">
+          <h2>Download History</h2>
+          <ul>
+            {downloadHistory.map((item, index) => (
+              <li key={index}>
+                <span>{item.url}</span> - <span>{item.fileName}</span> - <span>{item.timestamp.toString()}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
