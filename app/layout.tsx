@@ -22,9 +22,9 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <Toaster />
-          <NavbarRoutes>
+          
 
-          </NavbarRoutes>
+          <NavbarRoutes/>
 
           <main>
             {children}
