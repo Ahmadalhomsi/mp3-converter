@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 const ytdl = require("ytdl-core");
 const fs = require("fs");
 import ytdl2 from "youtubedl-core";
+import ytdlp from "ytdlp-nodejs";
 
 
 
@@ -48,18 +49,33 @@ export async function POST(request: Request, response: Response) {
             return new Response(videoStream, { headers });
         }
         else if (type === "mp4") {
-            const EventEmitter = require('events');
-            EventEmitter.defaultMaxListeners = 15; // Adjust the limit as needed
+            // const EventEmitter = require('events');
+            // EventEmitter.defaultMaxListeners = 15; // Adjust the limit as needed
             const videoStream = ytdl(url, {
                 format: 'mp4',
                 filter: 'videoandaudio',
-                quality: 'highest' 
+                quality: 'highest'
             });
 
             const headers = {
                 "Content-Disposition": `attachment; filename="${fileName}"`,
                 "Content-type": `video/mp4`,
             };
+
+            const thumbnailsOptions = {
+                quality: "max" as string,
+                type: "jpg" as string
+            };
+
+            console.log("come on");
+            const thumb = ytdlp.thumbnail(url, {
+                quality: "max",
+                type: "jpg"
+            });
+            console.log(thumb);
+
+            console.log("here");
+
 
             return new Response(videoStream, { headers });
 

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import DownloadHistory from "@/components/DownloadHistory";
 const youtube = require('youtube-metadata-from-url');
 
 
@@ -18,7 +19,29 @@ export default function Home() {
     fileName: string;
     timestamp: Date;
   }>>([]);
+  const [thumbnailUrl, setThumbnailUrl] = useState(""); // Add state for the thumbnail URL
 
+  interface DownloadItem {
+    url: string;
+    fileName: string;
+    timestamp: Date;
+  }
+
+  const handleHistoryItemClick = (url: string) => {
+    setYoutubeLink(url); // Set the input value to the clicked download history item URL
+  };
+
+  async function fetchThumbnail() {
+    try {
+      const response = await axios.post('/api/getThumbnail', { url: youtubeLink }); // Assuming the backend API returns thumbnail URL directly
+      setThumbnailUrl(response.data); // Set the thumbnail URL in state
+      console.log("XXXXX" + response.data);
+
+    } catch (error) {
+      console.error('Error fetching thumbnail:', error);
+      // Handle error if needed
+    }
+  }
 
   useEffect(() => {
     // Retrieve the last downloaded link from cookies when the component mounts
@@ -32,6 +55,7 @@ export default function Home() {
     if (history) {
       setDownloadHistory(JSON.parse(history));
     }
+
   }, []);
 
   async function getTitle(url: string) {
@@ -84,6 +108,8 @@ export default function Home() {
 
       document.body.removeChild(link);
       URL.revokeObjectURL(blobUrl);
+
+      fetchThumbnail();
 
       toast.success('Video successfully downloaded');
 
@@ -147,7 +173,13 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 gap-y-2">
+      {thumbnailUrl && (
+        <div className="thumbnail-frame mt-4">
+          <img src={thumbnailUrl} alt="Thumbnail" className=" h-auto max-w-lg rounded-2xl	" style={{ maxWidth: '400px', maxHeight: '400px' }} />
+        </div>
+      )}
+
       {(loadingMp3 || loadingMp4) && <div className="mb-4">Loading...</div>}
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <input
@@ -155,39 +187,28 @@ export default function Home() {
         value={youtubeLink}
         onChange={handleInputChange}
         placeholder="Enter YouTube link"
-        className="border border-gray-300 rounded-md px-3 py-2 mb-4 w-full max-w-md text-blue-500"
+        className="border border-gray-300 rounded-md px-3 py-2 mt-4 w-full max-w-md text-blue-500"
       />
-
       <div className="flex">
         <button
           onClick={() => handleDownload('mp3')}
           disabled={loadingMp3}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+          className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded mr-2"
         >
           {loadingMp3 ? "Downloading..." : "Download MP3"}
         </button>
         <button
           onClick={() => handleDownload('mp4')}
           disabled={loadingMp4}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
         >
           {loadingMp4 ? "Downloading..." : "Download MP4"}
         </button>
       </div>
       {lastDownloadedLink && <div className="mt-4">Last link: {lastDownloadedLink}</div>}
 
-      {downloadHistory.length > 0 && (
-        <div className="mt-4">
-          <h2>Download History</h2>
-          <ul>
-            {downloadHistory.map((item, index) => (
-              <li key={index}>
-                <span>{item.url}</span> - <span>{item.fileName}</span> - <span>{item.timestamp.toString()}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {downloadHistory.length > 0 && <DownloadHistory downloadHistory={downloadHistory} onHistoryItemClick={handleHistoryItemClick} />} {/* Use the DownloadHistory component */}
+
     </div>
   );
 }
