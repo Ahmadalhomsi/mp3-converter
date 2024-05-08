@@ -189,21 +189,21 @@ export default function Home() {
         value={youtubeLink}
         onChange={handleInputChange}
         placeholder="Enter YouTube link"
-        className="rounded-md px-3 py-2 mt-4 w-full max-w-md text-blue-600 focus:outline-none"
+        className="rounded-md px-3 py-2 mt-4 mb-1 w-full max-w-md text-blue-600 focus:outline-none"
       />
 
       <div className="flex">
         <button
           onClick={() => handleDownload('mp3')}
           disabled={loadingMp3}
-          className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded mr-2"
+          className="bg-blue-900 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg mr-2"
         >
           {loadingMp3 ? "Downloading..." : "Download MP3"}
         </button>
         <button
           onClick={() => handleDownload('mp4')}
           disabled={loadingMp4}
-          className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-900 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg mr-2"
         >
           {loadingMp4 ? "Downloading..." : "Download MP4"}
         </button>
