@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import DownloadHistory from "@/components/DownloadHistory";
+import ReactLoading from "react-loading";
 const youtube = require('youtube-metadata-from-url');
 
 
@@ -35,7 +36,7 @@ export default function Home() {
     try {
       const response = await axios.post('/api/getThumbnail', { url: youtubeLink }); // Assuming the backend API returns thumbnail URL directly
       setThumbnailUrl(response.data); // Set the thumbnail URL in state
-      console.log("XXXXX" + response.data);
+      console.log("Thumbnail Link: " + response.data);
 
     } catch (error) {
       console.error('Error fetching thumbnail:', error);
@@ -180,7 +181,8 @@ export default function Home() {
         </div>
       )}
 
-      {(loadingMp3 || loadingMp4) && <div className="mb-4">Loading...</div>}
+      {(loadingMp3 || loadingMp4) && <ReactLoading type={"cylon"} color="#fff" />
+}
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <input
         type="text"
