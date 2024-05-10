@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import DownloadHistory from "@/components/DownloadHistory";
 import ReactLoading from "react-loading";
+import { useUser } from "@clerk/nextjs";
 const youtube = require('youtube-metadata-from-url');
 
 
@@ -43,8 +44,11 @@ export default function Home() {
       // Handle error if needed
     }
   }
-
+  const data = useUser();
+    const user = data.user;
+    let userType: string;
   useEffect(() => {
+    
     // Retrieve the last downloaded link from cookies when the component mounts
     const lastLink = getCookie('lastDownloadedLink');
     if (lastLink) {
@@ -56,6 +60,22 @@ export default function Home() {
     if (history) {
       setDownloadHistory(JSON.parse(history));
     }
+
+    const checkUserType = async () => {
+      const unsafeMetadata = user?.unsafeMetadata; // Use with caution
+      // console.log(user);
+
+      userType = unsafeMetadata?.UserType as string;
+
+      console.log("User Type: ");
+      console.log(userType);
+
+      if(userType === "Premium")
+        console.log("No ads");
+        
+  };
+
+  checkUserType();
 
   }, []);
 

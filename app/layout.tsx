@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkProvider } from "@clerk/nextjs";
 import { NavbarRoutes } from "@/components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,16 +19,22 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body>
-          <Toaster />
-          <NavbarRoutes/>
+      <ClerkLoaded>
 
-          <main>
-            {children}
-          </main>
-        </body>
-      </html>
+        <html lang="en">
+          <body>
+            <Toaster />
+
+
+            <NavbarRoutes />
+
+            <main>
+              {children}
+            </main>
+          </body>
+        </html>
+      </ClerkLoaded>
+
     </ClerkProvider>
   )
 }
