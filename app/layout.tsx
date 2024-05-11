@@ -19,22 +19,23 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <ClerkLoaded>
-
-        <html lang="en">
-          <body>
-            <Toaster />
 
 
-            <NavbarRoutes />
+      <html lang="en">
+        <body>
+          <Toaster />
 
+
+          <NavbarRoutes />
+          <ClerkLoaded>
             <main>
               {children}
             </main>
-          </body>
-        </html>
-      </ClerkLoaded>
+          </ClerkLoaded>
+        </body>
+      </html>
 
-    </ClerkProvider>
+
+    </ClerkProvider >
   )
 }

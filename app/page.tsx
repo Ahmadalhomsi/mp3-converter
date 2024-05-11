@@ -22,6 +22,9 @@ export default function Home() {
     timestamp: Date;
   }>>([]);
   const [thumbnailUrl, setThumbnailUrl] = useState(""); // Add state for the thumbnail URL
+  const [isPremium, setIsPremium] = useState(true);
+
+
 
   interface DownloadItem {
     url: string;
@@ -45,10 +48,10 @@ export default function Home() {
     }
   }
   const data = useUser();
-    const user = data.user;
-    let userType: string;
+  const user = data.user;
+  let userType: string;
   useEffect(() => {
-    
+
     // Retrieve the last downloaded link from cookies when the component mounts
     const lastLink = getCookie('lastDownloadedLink');
     if (lastLink) {
@@ -70,12 +73,17 @@ export default function Home() {
       console.log("User Type: ");
       console.log(userType);
 
-      if(userType === "Premium")
+      if (userType === "Premium") {
         console.log("No ads");
-        
-  };
+        setIsPremium(true)
+      }
+      else
+      setIsPremium(false)
 
-  checkUserType();
+
+    };
+
+    checkUserType();
 
   }, []);
 
@@ -202,7 +210,7 @@ export default function Home() {
       )}
 
       {(loadingMp3 || loadingMp4) && <ReactLoading type={"cylon"} color="#fff" />
-}
+      }
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <input
         type="text"
@@ -232,6 +240,25 @@ export default function Home() {
 
       {downloadHistory.length > 0 && <DownloadHistory downloadHistory={downloadHistory} onHistoryItemClick={handleHistoryItemClick} />} {/* Use the DownloadHistory component */}
 
+      <Ad isPremium={isPremium} />
     </div>
+
   );
+
+  function Ad({ isPremium }: { isPremium: boolean }) {
+    return (
+      <>
+        {!isPremium && (
+          <div className="fixed bottom-0 left-0 w-full bg-gray-200 bg-opacity-70 p-6 flex justify-center">
+            <div className="ad-content">
+              <p className="text-gray-800">AD</p>
+              {/* Other ad content */}
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+
 }
