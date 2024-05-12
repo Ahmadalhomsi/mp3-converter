@@ -4,6 +4,8 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { ClerkLoaded, ClerkProvider } from "@clerk/nextjs";
 import { NavbarRoutes } from "@/components/Header";
+import Loading from "./loading";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,11 +26,9 @@ export default function RootLayout({
       <html lang="en">
         <body>
           <Toaster />
-
-
           <NavbarRoutes />
           <ClerkLoaded>
-            <main>
+            <main className="min-h-screen">
               {children}
             </main>
           </ClerkLoaded>

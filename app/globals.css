@@ -18,12 +18,51 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  animation: gradientAnimation 10s infinite;
+  background-repeat: no-repeat;
+  min-height: max-content;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-color: rgb(var(--background-start-rgb));
+  }
+  50% {
+    background-color: rgb(var(--background-end-rgb));
+  }
+  100% {
+    background-color: rgb(var(--background-start-rgb));
+  }
+}
+
+/* Define the keyframes for the loading animation */
+@keyframes loadingAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* Apply the loading animation to a separate element */
+.loading-circle {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #333; /* Change color as needed */
+  border-radius: 50%;
+  animation: loadingAnimation 1s linear infinite; /* Adjust duration and timing function as needed */
+}
+
+/* Hide the loading circle after initial render */
+.loaded .loading-circle {
+  display: none;
 }
 
 @layer utilities {
@@ -31,4 +70,3 @@ body {
     text-wrap: balance;
   }
 }
-

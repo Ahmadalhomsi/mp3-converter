@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import DownloadHistory from "@/components/DownloadHistory";
 import ReactLoading from "react-loading";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 const youtube = require('youtube-metadata-from-url');
 
 
@@ -50,7 +51,11 @@ export default function Home() {
   const data = useUser();
   const user = data.user;
   let userType: string;
+
+
   useEffect(() => {
+
+    
 
     // Retrieve the last downloaded link from cookies when the component mounts
     const lastLink = getCookie('lastDownloadedLink');
@@ -78,7 +83,7 @@ export default function Home() {
         setIsPremium(true)
       }
       else
-      setIsPremium(false)
+        setIsPremium(false)
 
 
     };
@@ -200,6 +205,7 @@ export default function Home() {
     }
     return '';
   }
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 gap-y-2">
@@ -240,6 +246,14 @@ export default function Home() {
 
       {downloadHistory.length > 0 && <DownloadHistory downloadHistory={downloadHistory} onHistoryItemClick={handleHistoryItemClick} />} {/* Use the DownloadHistory component */}
 
+      <Link href="/tts" className="bg-blue-900 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg mr-2">
+  
+          Go to TTS Page
+        
+      </Link>
+
+      
+      
       <Ad isPremium={isPremium} />
     </div>
 

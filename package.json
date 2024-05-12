@@ -16,6 +16,7 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-loading": "^2.0.3",
+    "simple-tts-mp3": "^1.1.0",
     "youtube-metadata-from-url": "^1.0.3",
     "youtubedl-core": "^4.11.7",
     "ytdl-core": "^4.11.5",
