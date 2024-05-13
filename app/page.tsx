@@ -24,6 +24,7 @@ export default function Home() {
   }>>([]);
   const [thumbnailUrl, setThumbnailUrl] = useState(""); // Add state for the thumbnail URL
   const [isPremium, setIsPremium] = useState(true);
+  const [selectedQuality, setSelectedQuality] = useState('highest');
 
 
 
@@ -32,6 +33,11 @@ export default function Home() {
     fileName: string;
     timestamp: Date;
   }
+
+  // Function to handle changes in quality selection
+  const handleQualityChange = (event: any) => {
+    setSelectedQuality(event.target.value);
+  };
 
   const handleHistoryItemClick = (url: string) => {
     setYoutubeLink(url); // Set the input value to the clicked download history item URL
@@ -44,7 +50,7 @@ export default function Home() {
       console.log("Thumbnail Link: " + response.data);
 
     } catch (error) {
-      console.error('Error fetching thumbnail:', error);
+      console.log('Error fetching thumbnail:', error);
       // Handle error if needed
     }
   }
@@ -55,7 +61,6 @@ export default function Home() {
 
   useEffect(() => {
 
-    
 
     // Retrieve the last downloaded link from cookies when the component mounts
     const lastLink = getCookie('lastDownloadedLink');
@@ -121,7 +126,7 @@ export default function Home() {
       setError("");
 
 
-      const response = await axios.post('/api/yt', { url, type }, { responseType: 'blob' });
+      const response = await axios.post('/api/yt', { url, type, selectedQuality }, { responseType: 'blob' });
 
       const blobUrl = URL.createObjectURL(response.data);
 
@@ -205,7 +210,7 @@ export default function Home() {
     }
     return '';
   }
-  
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 gap-y-2">
@@ -225,6 +230,12 @@ export default function Home() {
         placeholder="Enter YouTube link"
         className="rounded-md px-3 py-2 mt-4 mb-1 w-full max-w-md text-blue-600 focus:outline-none"
       />
+
+      <select value={selectedQuality} onChange={handleQualityChange} className="rounded-md px-3 py-2 mt-4 mb-1 w-full max-w-md text-blue-600 focus:outline-none">
+        <option value="default" disabled>Select Quality</option>
+        <option value="lowest">Lowest</option>
+        <option value="highest">Highest</option>
+      </select>
 
       <div className="flex">
         <button
@@ -246,14 +257,10 @@ export default function Home() {
 
       {downloadHistory.length > 0 && <DownloadHistory downloadHistory={downloadHistory} onHistoryItemClick={handleHistoryItemClick} />} {/* Use the DownloadHistory component */}
 
-      <Link href="/tts" className="bg-blue-900 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg mr-2">
-  
-          Go to TTS Page
-        
-      </Link>
 
-      
-      
+
+
+
       <Ad isPremium={isPremium} />
     </div>
 

@@ -9,9 +9,14 @@ import ytdlp from "ytdlp-nodejs";
 export async function POST(request: Request, response: Response) {
     try {
         const data = await request.json();
+        
+        console.log(data);
+        
         const url = data.url;
         const type = data.type;
+        const selectedQuality = data.selectedQuality;
 
+        
 
         if (!ytdl2.validateURL(url))
             return NextResponse.json({ error: "Invalid YouTube link. Please enter a valid YouTube video URL." }, { status: 400 });
@@ -37,7 +42,7 @@ export async function POST(request: Request, response: Response) {
         if (type === "mp3") {
             const videoStream = ytdl(url, {
                 format: type,
-                filter: type === 'mp3' ? 'audioonly' : 'videoonly',
+                filter: 'audioonly',
             });
             // Set headers for file download
             const headers = {
@@ -49,12 +54,14 @@ export async function POST(request: Request, response: Response) {
             return new Response(videoStream, { headers });
         }
         else if (type === "mp4") {
+            console.log("BOOOY" + selectedQuality);
+            
             // const EventEmitter = require('events');
             // EventEmitter.defaultMaxListeners = 15; // Adjust the limit as needed
             const videoStream = ytdl(url, {
                 format: 'mp4',
                 filter: 'videoandaudio',
-                quality: 'highest'
+                quality: selectedQuality === 'highest' ? 'highest' : 'lowest'
             });
 
             const headers = {
@@ -85,6 +92,6 @@ export async function POST(request: Request, response: Response) {
 
     } catch (err) {
         console.error("Error:", err);
-        return NextResponse.json({ error: "Internal server error " + err }, { status: 500 });
+        return NextResponse.json({ error: "Internal server error " + err });
     }
 }
