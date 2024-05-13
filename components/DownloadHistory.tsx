@@ -12,6 +12,11 @@ interface DownloadHistoryProps {
   downloadHistory: DownloadItem[];
   onHistoryItemClick: (url: string) => void; // Callback function to set the input value
 }
+/*
+  Interface ve methods kısımları Ibrahim Arda ya aittir. Geri kalan kısımlar Ahmad Alhomsi ye aittir. 
+
+
+*/
 
 const DownloadHistory: React.FC<DownloadHistoryProps> = ({ downloadHistory, onHistoryItemClick }) => {
   const formatDate = (timestamp: Date) => {
