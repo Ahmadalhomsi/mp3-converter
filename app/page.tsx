@@ -193,9 +193,9 @@ export default function Home() {
   }
 
   // Function to set a cookie
-  function setCookie(name: string, value: any, minutes: number) {
+  function setCookie(name: string, value: any, hours: number) {
     const expires = new Date();
-    expires.setTime(expires.getTime() + minutes * 60 * 1000); // Convert minutes to milliseconds
+    expires.setTime(expires.getTime() + hours * 60 * 60 * 1000); // Convert minutes to milliseconds
     document.cookie = `${name}###${value};expires=${expires.toUTCString()};path=/`;
   }
 
@@ -223,19 +223,24 @@ export default function Home() {
       {(loadingMp3 || loadingMp4) && <ReactLoading type={"cylon"} color="#fff" />
       }
       {error && <div className="text-red-500 mb-4">{error}</div>}
-      <input
-        type="text"
-        value={youtubeLink}
-        onChange={handleInputChange}
-        placeholder="Enter YouTube link"
-        className="rounded-md px-3 py-2 mt-4 mb-1 w-full max-w-md text-blue-600 focus:outline-none"
-      />
 
-      <select value={selectedQuality} onChange={handleQualityChange} className="rounded-md px-3 py-2 mt-4 mb-1 w-full max-w-md text-blue-600 focus:outline-none">
-        <option value="default" disabled>Select Quality</option>
-        <option value="lowest">Lowest</option>
-        <option value="highest">Highest</option>
-      </select>
+      <div>
+        <input
+          type="text"
+          value={youtubeLink}
+          onChange={handleInputChange}
+          placeholder="Enter YouTube link"
+          className="rounded-md px-3 py-2 mr-2 mb-1 w-96 text-blue-600 focus:outline-none"
+        />
+
+
+        <select value={selectedQuality} onChange={handleQualityChange} className="rounded-md px-2 py-2 mt-1 mb-1 w-32  text-blue-600 focus:outline-none">
+          <option value="default" disabled>Select Quality</option>
+          <option value="lowest">Lowest</option>
+          <option value="highest">Highest</option>
+        </select>
+
+      </div>
 
       <div className="flex">
         <button
