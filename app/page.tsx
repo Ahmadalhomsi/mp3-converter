@@ -6,7 +6,9 @@ import DownloadHistory from "@/components/DownloadHistory";
 import ReactLoading from "react-loading";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 const youtube = require('youtube-metadata-from-url');
+
 
 
 
@@ -56,11 +58,11 @@ export default function Home() {
   }
   const data = useUser();
   const user = data.user;
-  let userType: string;
+  
 
 
   useEffect(() => {
-
+    let userType: string;
 
     // Retrieve the last downloaded link from cookies when the component mounts
     const lastLink = getCookie('lastDownloadedLink');
@@ -216,7 +218,7 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen py-2 gap-y-2">
       {thumbnailUrl && (
         <div className="thumbnail-frame mt-4">
-          <img src={thumbnailUrl} alt="Thumbnail" className=" h-auto max-w-lg rounded-2xl	" style={{ maxWidth: '400px', maxHeight: '400px' }} />
+          <Image src={thumbnailUrl} alt="Thumbnail" className=" h-auto max-w-lg rounded-2xl	" style={{ maxWidth: '400px', maxHeight: '400px' }} />
         </div>
       )}
 
